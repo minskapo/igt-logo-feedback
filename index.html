@@ -111,13 +111,19 @@ section{padding-block:88px}
 @media (max-width:860px){.compare{grid-template-columns:repeat(2,1fr)}}
 
 /* homepage */
-.web-full{display:grid;grid-template-columns:1fr 1fr 300px;gap:20px;align-items:start}
-.web-full figure{margin:0;position:relative}
-.web-full img{border-radius:12px;border:1px solid var(--line);cursor:zoom-in;width:100%}
-.web-full figcaption{font-size:14px;font-weight:700;color:var(--muted);margin-bottom:8px}
-.pin{position:absolute;right:12px;width:34px;height:34px;border-radius:50%;background:var(--ink);color:var(--lime);display:grid;place-items:center;font-weight:700;font-size:15px}
-.legend{list-style:none;margin:0;padding:0;display:grid;gap:0;position:sticky;top:84px}
-.legend li{border-top:2px solid var(--ink);padding-block:12px 18px;font-size:15px;line-height:1.6}
+.web-full{display:grid;grid-template-columns:minmax(0,1fr);gap:20px}
+.browser{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--white);box-shadow:0 10px 40px rgba(28,37,37,.10);min-width:0}
+.chrome{display:flex;align-items:center;gap:6px;padding:10px 14px;background:var(--surface);border-bottom:1px solid var(--line)}
+.chrome i{width:10px;height:10px;border-radius:50%;background:var(--line)}
+.chrome span{margin-left:12px;font-family:var(--f-mono);font-size:12px;color:var(--muted);background:var(--white);border-radius:6px;padding:2px 12px}
+.scroller{height:min(86vh,1000px);overflow-y:auto;overscroll-behavior:contain;scroll-behavior:smooth}
+.page{position:relative}
+.page img{width:100%;display:block}
+.pin{position:absolute;right:16px;width:40px;height:40px;border-radius:50%;background:var(--ink);color:var(--lime);display:grid;place-items:center;font-weight:700;font-size:16px;box-shadow:0 0 0 4px var(--lime)}
+.legend{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0 18px;order:-1}
+.legend button{all:unset;display:block;cursor:pointer;border-top:2px solid var(--ink);padding-block:12px 18px;font-size:15px;line-height:1.6;width:100%}
+.legend button:hover b{text-decoration:underline}
+.legend button:focus-visible{outline:3px solid var(--leaf);outline-offset:2px}
 .legend b{display:flex;gap:10px;align-items:center;font-size:16px;margin-bottom:4px}
 .legend b i{font-style:normal;width:26px;height:26px;border-radius:50%;background:var(--ink);color:var(--lime);display:grid;place-items:center;font-size:13px;flex:none}
 .web-more{display:grid;grid-template-columns:1.3fr 1fr;gap:20px;margin-top:48px}
@@ -127,8 +133,7 @@ section{padding-block:88px}
 .heads{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:20px}
 .heads img{border-radius:10px;border:1px solid var(--line);cursor:zoom-in}
 .heads small{display:block;font-size:13px;color:var(--muted);margin-top:4px}
-@media (max-width:960px){.web-full{grid-template-columns:1fr 1fr}.legend{grid-column:1/-1;position:static;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0 20px}.web-more{grid-template-columns:1fr}.heads{grid-template-columns:repeat(2,1fr)}}
-@media (max-width:560px){.web-full{grid-template-columns:1fr}}
+@media (max-width:960px){.legend{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}.scroller{height:70vh}.web-more{grid-template-columns:1fr}.heads{grid-template-columns:repeat(2,1fr)}}
 
 /* templates */
 .tpl{margin-bottom:64px}
@@ -141,6 +146,7 @@ section{padding-block:88px}
 .g2{grid-template-columns:repeat(2,1fr)}
 .g4{grid-template-columns:repeat(4,1fr)}
 .span2{grid-column:span 2}
+.gal img.plain{border:0;border-radius:4px}
 @media (max-width:860px){.g3,.g4{grid-template-columns:repeat(2,1fr)}.span2{grid-column:span 2}}
 @media (max-width:560px){.g3,.g2,.g4{grid-template-columns:1fr}.span2{grid-column:auto}}
 
@@ -155,6 +161,57 @@ section{padding-block:88px}
 .fb-form iframe{width:100%;border:0;min-height:600px}
 .fallback{font-size:14px;color:var(--muted)}
 @media (max-width:960px){.fb-grid{grid-template-columns:1fr}.fb-aside{position:static}.fb-form{padding:18px 12px 4px}}
+
+/* feedback widgets */
+.fbw{border-top:2px solid var(--ink);padding-top:20px;display:grid;gap:16px;min-width:0}
+#web .fbw,#templates .fbw{background:var(--white);border:1px solid var(--line);border-radius:20px;padding:28px;margin-top:40px}
+.fbw-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 16px}
+.fbw-head h4{margin:0;font-size:19px;font-weight:900}
+.stat{font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+.stat b{color:var(--ink);font-size:16px}
+.fbw form{display:grid;gap:10px}
+.stars{display:flex;gap:4px;align-items:center;flex-wrap:wrap}
+.stars button{all:unset;cursor:pointer;font-size:30px;line-height:1;color:var(--line);padding:0 2px;border-radius:6px}
+.stars button.on{color:var(--leaf)}
+.stars button:focus-visible{outline:3px solid var(--leaf)}
+.stars small{margin-left:8px;font-size:13px;color:var(--muted)}
+.fbw textarea,.fbw input[type=text]{font:inherit;font-size:15px;color:var(--ink);background:var(--white);border:1px solid var(--line);border-radius:12px;padding:10px 12px;width:100%;min-width:0}
+.fbw textarea{min-height:84px;resize:vertical}
+.fbw textarea:focus,.fbw input:focus{outline:2px solid var(--leaf);border-color:transparent}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.row input{flex:1 1 180px;max-width:260px}
+.row .btn{padding:10px 20px;font-size:15px}
+.msg{font-size:14px;color:var(--leaf);font-weight:700}
+.msg.err{color:#B3261E}
+.clist{list-style:none;margin:0;padding:0;display:grid;gap:10px;max-height:420px;overflow-y:auto}
+.clist li{background:var(--surface);border-radius:12px;padding:12px 14px;font-size:15px;line-height:1.6;overflow-wrap:anywhere}
+.clist .meta{display:flex;gap:8px;align-items:center;font-size:12.5px;color:var(--muted);margin-bottom:2px}
+.clist .meta b{color:var(--ink);font-size:13px}
+.clist .meta .s{color:var(--leaf);letter-spacing:1px}
+.empty{font-size:14px;color:var(--muted)}
+.more{all:unset;cursor:pointer;font-size:14px;font-weight:700;text-decoration:underline}
+/* pick */
+.pickw{margin-top:28px;background:var(--surface);border-radius:20px;padding:28px;display:grid;gap:18px}
+.pickw h4{margin:0;font-size:19px;font-weight:900}
+.picks{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.picks button{all:unset;cursor:pointer;background:var(--white);border:2px solid var(--line);border-radius:14px;padding:14px;display:grid;gap:10px;text-align:left}
+.picks button[aria-pressed=true]{border-color:var(--ink);background:var(--lime)}
+.picks button:focus-visible{outline:3px solid var(--leaf);outline-offset:2px}
+.picks .t{font-weight:700;font-size:15px}
+.bar{height:10px;border-radius:999px;background:var(--surface);overflow:hidden}
+.picks button[aria-pressed=true] .bar{background:rgba(255,255,255,.6)}
+.bar i{display:block;height:100%;background:var(--ink);border-radius:999px;width:0;transition:width .4s}
+.picks .n{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+@media (max-width:760px){.picks{grid-template-columns:repeat(2,1fr)}}
+/* board */
+.board{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.board .card{background:var(--white);border-radius:16px;padding:20px;display:grid;gap:6px;text-decoration:none}
+.board .card .k{font-size:14px;font-weight:700;color:var(--muted)}
+.board .card .v{font-size:32px;font-weight:900;font-variant-numeric:tabular-nums}
+.board .card .v small{font-size:14px;font-weight:500;color:var(--muted);margin-left:6px}
+.muted{color:var(--muted)}
+@media (max-width:760px){.board{grid-template-columns:1fr 1fr}}
+@media (max-width:440px){.board{grid-template-columns:1fr}}
 
 footer{padding-block:40px;font-size:14px;color:var(--muted);border-top:1px solid var(--line)}
 
@@ -181,7 +238,7 @@ footer{padding-block:40px;font-size:14px;color:var(--muted);border-top:1px solid
       <li><a href="#web">홈페이지</a></li>
       <li><a href="#templates">템플릿</a></li>
     </ul>
-    <a class="btn" href="#feedback">의견 남기기</a>
+    <a class="btn" href="#feedback">의견 현황</a>
   </div>
 </nav>
 
@@ -189,7 +246,7 @@ footer{padding-block:40px;font-size:14px;color:var(--muted);border-top:1px solid
   <div class="wrap">
     <p class="eyebrow" style="color:var(--ink)">Brand Identity · 1차 시안 · 2026.10</p>
     <h1>새 로고,<br>어떤 시안이 좋을까요?</h1>
-    <p class="lead">새 로고 시안 4종과 홈페이지 개편안, 브랜드 적용 예시를 한 페이지에 모았습니다. 천천히 둘러보신 뒤 맨 아래에서 의견을 남겨 주세요.</p>
+    <p class="lead">새 로고 시안 4종과 홈페이지 개편안, 브랜드 적용 예시를 한 페이지에 모았습니다. 각 영역 바로 아래에서 별점과 의견을 남길 수 있습니다.</p>
     <div class="hero-syms">
       <a href="#d01"><img src="img/sym01.png" alt="시안 01 심볼"><span>시안 01 · 선의 리듬</span></a>
       <a href="#d02"><img src="img/sym02.png" alt="시안 02 심볼"><span>시안 02 · 점진적 전환</span></a>
@@ -198,8 +255,8 @@ footer{padding-block:40px;font-size:14px;color:var(--muted);border-top:1px solid
     </div>
     <ol class="steps">
       <li><b>둘러보기</b>시안별 설명과 적용 예시를 봅니다. 이미지를 누르면 크게 볼 수 있습니다.</li>
-      <li><b>별점과 의견</b>맨 아래 설문에서 시안마다 별점을 매기고 선호 시안을 고릅니다.</li>
-      <li><b>보내기</b>로그인은 필요 없고, 5분 안팎이면 충분합니다. 이름은 적지 않아도 됩니다.</li>
+      <li><b>별점과 의견</b>시안마다 아래 칸에서 별점을 매기고 의견을 적습니다. ‘한눈에 비교하기’에서 가장 좋은 시안도 골라 주세요.</li>
+      <li><b>함께 보기</b>로그인은 필요 없습니다. 남긴 의견은 바로 다른 구성원에게도 보이며, 이름은 적지 않아도 됩니다.</li>
     </ol>
   </div>
 </header>
@@ -228,7 +285,7 @@ footer{padding-block:40px;font-size:14px;color:var(--muted);border-top:1px solid
 
 <section class="band" id="drafts">
   <div class="wrap">
-    <div class="sec-head"><p class="eyebrow">Signature logo drafts</p><h2>로고 시안 4종</h2><p>각 시안은 심볼, 로고타입 구성(국문형·혼합형·영문형), 실제 적용 예시 순서로 보여 드립니다. ‘형태’와 ‘함께 볼 점’은 검토를 돕기 위한 정리입니다.</p></div>
+    <div class="sec-head"><p class="eyebrow">Signature logo drafts</p><h2>로고 시안 4종</h2><p>각 시안은 심볼, 로고타입 구성(국문형·혼합형·영문형), 실제 적용 예시 순서로 보여 드립니다. 시안마다 맨 아래에서 바로 별점과 의견을 남길 수 있고, 다른 구성원의 의견도 함께 보입니다.</p></div>
 
     <article class="draft" id="d01">
       <div class="panel"><div class="num">01</div><img src="img/sym01.png" alt="시안 01 심볼: 길이와 굵기가 다른 선들이 방사형으로 모인 형태"><h3>Symbol A · 선의 리듬</h3></div>
@@ -249,7 +306,7 @@ footer{padding-block:40px;font-size:14px;color:var(--muted);border-top:1px solid
           <figure><img src="img/card01.jpg" alt="시안 01 배경 적용 예시"><figcaption>배경·컬러 적용</figcaption></figure>
           <figure><img src="img/web01.jpg" alt="시안 01 웹 헤더 적용 예시"><figcaption>웹 헤더 적용</figcaption></figure>
         </div></div>
-        <a class="btn ghost go" href="#feedback">이 시안 평가하기 ↓</a>
+        <div class="fbw" data-section="d01" data-title="시안 01"></div>
       </div>
     </article>
 
@@ -272,7 +329,7 @@ footer{padding-block:40px;font-size:14px;color:var(--muted);border-top:1px solid
           <figure><img src="img/card02.jpg" alt="시안 02 배경 적용 예시"><figcaption>배경·컬러 적용</figcaption></figure>
           <figure><img src="img/web02.jpg" alt="시안 02 웹 헤더 적용 예시"><figcaption>웹 헤더 적용</figcaption></figure>
         </div></div>
-        <a class="btn ghost go" href="#feedback">이 시안 평가하기 ↓</a>
+        <div class="fbw" data-section="d02" data-title="시안 02"></div>
       </div>
     </article>
 
@@ -295,7 +352,7 @@ footer{padding-block:40px;font-size:14px;color:var(--muted);border-top:1px solid
           <figure><img src="img/card03.jpg" alt="시안 03 배경 적용 예시"><figcaption>배경·컬러 적용</figcaption></figure>
           <figure><img src="img/web03.jpg" alt="시안 03 웹 헤더 적용 예시"><figcaption>웹 헤더 적용</figcaption></figure>
         </div></div>
-        <a class="btn ghost go" href="#feedback">이 시안 평가하기 ↓</a>
+        <div class="fbw" data-section="d03" data-title="시안 03"></div>
       </div>
     </article>
 
@@ -318,7 +375,7 @@ footer{padding-block:40px;font-size:14px;color:var(--muted);border-top:1px solid
           <figure><img src="img/card04.jpg" alt="시안 04 배경 적용 예시"><figcaption>배경·컬러 적용</figcaption></figure>
           <figure><img src="img/web04.jpg" alt="시안 04 웹 헤더 적용 예시"><figcaption>웹 헤더 적용</figcaption></figure>
         </div></div>
-        <a class="btn ghost go" href="#feedback">이 시안 평가하기 ↓</a>
+        <div class="fbw" data-section="d04" data-title="시안 04"></div>
       </div>
     </article>
   </div>
@@ -326,28 +383,34 @@ footer{padding-block:40px;font-size:14px;color:var(--muted);border-top:1px solid
 
 <section id="compare">
   <div class="wrap">
-    <div class="sec-head"><p class="eyebrow">Compare</p><h2>한눈에 비교하기</h2><p>심볼과 국문형 로고를 나란히 놓았습니다. 누르면 해당 시안 설명으로 이동합니다.</p></div>
+    <div class="sec-head"><p class="eyebrow">Compare</p><h2>한눈에 비교하기</h2><p>심볼과 국문형 로고를 나란히 놓았습니다. 아래에서 가장 마음에 드는 시안 하나를 골라 주세요. 다시 고르면 마지막 선택만 반영됩니다.</p></div>
     <div class="compare">
       <a href="#d01"><div class="tile"><img src="img/sym01.png" alt=""></div><div class="ko"><img src="img/ko01.png" alt="시안 01 국문형"></div><span>01 · Symbol A 선의 리듬</span></a>
       <a href="#d02"><div class="tile"><img src="img/sym02.png" alt=""></div><div class="ko"><img src="img/ko02.png" alt="시안 02 국문형"></div><span>02 · Symbol B 점진적 전환</span></a>
       <a href="#d03"><div class="tile"><img src="img/sym03.png" alt=""></div><div class="ko"><img src="img/ko03.png" alt="시안 03 국문형"></div><span>03 · Symbol C 잎사귀의 흐름</span></a>
       <a href="#d04"><div class="tile"><img src="img/sym04.png" alt=""></div><div class="ko"><img src="img/ko04.png" alt="시안 04 국문형"></div><span>04 · Symbol A 고딕 워드마크</span></a>
     </div>
+    <div class="pickw" id="pick"></div>
   </div>
 </section>
 
 <section class="band" id="web">
   <div class="wrap">
-    <div class="sec-head"><p class="eyebrow">Touch point · Web</p><h2>홈페이지 개편안</h2><p>메인 화면을 맨 위부터 맨 아래까지 두 단으로 나눠 보여 드립니다. 이미지를 누르면 크게 볼 수 있습니다.</p></div>
+    <div class="sec-head"><p class="eyebrow">Touch point · Web</p><h2>홈페이지 개편안</h2><p>메인 화면을 실제 브라우저처럼 위에서 아래로 이어서 보여 드립니다. 화면 안에서 스크롤하거나, 위쪽 번호를 누르면 해당 구역으로 이동합니다.</p></div>
     <div class="web-full">
-      <figure><figcaption>상단</figcaption><img src="img/webfull_a.jpg" alt="홈페이지 메인 화면 상단: 메뉴, 첫 화면, 최신소식"><span class="pin" style="top:22%">1</span><span class="pin" style="top:72%">2</span></figure>
-      <figure><figcaption>하단 (스크롤 이어서)</figcaption><img src="img/webfull_b.jpg" alt="홈페이지 메인 화면 하단: 후원 배너, 지금 읽어야 할 연구, 푸터"><span class="pin" style="top:9%">3</span><span class="pin" style="top:28%">4</span><span class="pin" style="top:74%">5</span></figure>
+      <div class="browser">
+        <div class="scroller" id="webScroller" tabindex="0" aria-label="홈페이지 메인 화면 전체 (스크롤)">
+          <div class="page"><img src="img/webfull.jpg" alt="홈페이지 메인 화면 전체: 메뉴와 첫 화면, 최신소식, 후원 배너, 지금 읽어야 할 연구, 푸터">
+            <span class="pin" data-pin="1" style="top:9.4%">1</span><span class="pin" data-pin="2" style="top:31%">2</span><span class="pin" data-pin="3" style="top:51%">3</span><span class="pin" data-pin="4" style="top:60.6%">4</span><span class="pin" data-pin="5" style="top:84.6%">5</span>
+          </div>
+        </div>
+      </div>
       <ol class="legend">
-        <li><b><i>1</i>상단 메뉴·첫 화면</b>연구·소식·참여·후원·소개 메뉴, ‘문의·강의 요청’과 ‘기후시민플랫폼’ 버튼, 검색을 둡니다. 큰 사진 위 라임색 카드로 주력 연구를 소개합니다.</li>
-        <li><b><i>2</i>최신소식</b>분류 태그와 날짜를 붙인 목록으로 최근 소식을 보여 줍니다.</li>
-        <li><b><i>3</i>후원 배너</b>‘지속가능한 녹색 전환을 함께 만들어주세요’ 문구와 ‘후원하기’ 버튼을 둡니다.</li>
-        <li><b><i>4</i>지금 읽어야 할 연구</b>사진 카드 세 장으로 추천 연구를 소개합니다.</li>
-        <li><b><i>5</i>푸터</b>메뉴 바로가기, 기관 정보, 로고를 정리합니다.</li>
+        <li><button type="button" data-go="1"><b><i>1</i>상단 메뉴·첫 화면</b>연구·소식·참여·후원·소개 메뉴, ‘문의·강의 요청’과 ‘기후시민플랫폼’ 버튼, 검색을 둡니다. 큰 사진 위 라임색 카드로 주력 연구를 소개합니다.</button></li>
+        <li><button type="button" data-go="2"><b><i>2</i>최신소식</b>분류 태그와 날짜를 붙인 목록으로 최근 소식을 보여 줍니다.</button></li>
+        <li><button type="button" data-go="3"><b><i>3</i>후원 배너</b>‘지속가능한 녹색 전환을 함께 만들어주세요’ 문구와 ‘후원하기’ 버튼을 둡니다.</button></li>
+        <li><button type="button" data-go="4"><b><i>4</i>지금 읽어야 할 연구</b>사진 카드 세 장으로 추천 연구를 소개합니다.</button></li>
+        <li><button type="button" data-go="5"><b><i>5</i>푸터</b>메뉴 바로가기, 기관 정보, 로고를 정리합니다.</button></li>
       </ol>
     </div>
     <div class="web-more">
@@ -361,6 +424,7 @@ footer{padding-block:40px;font-size:14px;color:var(--muted);border-top:1px solid
       <div><img src="img/web03.jpg" alt="시안 03 헤더"><small>시안 03</small></div>
       <div><img src="img/web04.jpg" alt="시안 04 헤더"><small>시안 04</small></div>
     </div>
+    <div class="fbw" data-section="web" data-title="홈페이지 개편안"></div>
   </div>
 </section>
 
@@ -388,8 +452,8 @@ footer{padding-block:40px;font-size:14px;color:var(--muted);border-top:1px solid
         <figure><figcaption>이슈브리프 표지</figcaption><img src="img/brief.jpg" alt="이슈브리프 표지 3종"></figure>
         <figure><figcaption>포스터</figcaption><img src="img/poster.jpg" alt="포스터 2종"></figure>
         <figure class="span2"><figcaption>보고서 표지</figcaption><img src="img/report.jpg" alt="보고서 표지 5종"></figure>
-        <figure><figcaption>명함 (앞·뒤)</figcaption><img src="img/bizcard.jpg" alt="명함 첫 번째 안"></figure>
-        <figure><figcaption>명함 (심볼 강조형)</figcaption><img src="img/bizcard2.jpg" alt="명함 두 번째 안"></figure>
+        <figure><figcaption>명함 (앞·뒤)</figcaption><img class="plain" src="img/bizcard.jpg" alt="명함 첫 번째 안"></figure>
+        <figure><figcaption>명함 (심볼 강조형)</figcaption><img class="plain" src="img/bizcard2.jpg" alt="명함 두 번째 안"></figure>
       </div>
     </div>
 
@@ -407,44 +471,28 @@ footer{padding-block:40px;font-size:14px;color:var(--muted);border-top:1px solid
         <figure><figcaption>히스토그램</figcaption><img src="img/info_hist.jpg" alt="인포그래픽: 히스토그램"></figure>
       </div>
     </div>
+    <div class="fbw" data-section="templates" data-title="템플릿"></div>
   </div>
 </section>
 
 <section class="feedback" id="feedback">
   <div class="wrap">
-    <div class="sec-head"><p class="eyebrow">Your opinion</p><h2>의견 남기기</h2><p>시안마다 별점을 매기고, 가장 마음에 드는 시안을 골라 주세요. 나머지 의견 칸은 비워 두셔도 됩니다.</p></div>
-    <div class="fb-grid">
-      <aside class="fb-aside" aria-label="시안 다시 보기">
-        <p class="label" style="margin:0">시안 다시 보기</p>
-        <div class="mini">
-          <a href="#d01"><img src="img/sym01.png" alt="">01</a>
-          <a href="#d02"><img src="img/sym02.png" alt="">02</a>
-          <a href="#d03"><img src="img/sym03.png" alt="">03</a>
-          <a href="#d04"><img src="img/sym04.png" alt="">04</a>
-        </div>
-        <p class="fallback">설문 칸이 보이지 않으면 <a href="https://tally.so/r/Me9pyY" target="_blank" rel="noopener">새 창에서 설문 열기</a>를 눌러 주세요.</p>
-      </aside>
-      <div class="fb-form">
-        <iframe data-tally-src="https://tally.so/embed/Me9pyY?alignLeft=1&amp;hideTitle=1&amp;transparentBackground=1&amp;dynamicHeight=1" width="100%" height="1800" title="녹색전환연구소 로고 시안 의견 설문"></iframe>
-      </div>
-    </div>
+    <div class="sec-head"><p class="eyebrow">Live results</p><h2>지금까지의 의견 현황</h2><p>구성원들이 남긴 별점과 선호 시안이 실시간으로 모입니다. 같은 사람이 다시 매기면 마지막 점수만 집계합니다.</p></div>
+    <div class="board" id="board"><p class="muted">불러오는 중입니다.</p></div>
   </div>
 </section>
 </main>
 
 <footer>
-  <div class="wrap">원본: PUSH THE LEVER, 「녹색전환연구소 Brand Design Draft」(2026.10.08). 내부 의견수렴용 페이지이며 외부 공유를 삼가 주세요.</div>
+  <div class="wrap">원본: PUSH THE LEVER, 「녹색전환연구소 Brand Design Draft」(2026.10.08). 내부 의견수렴용 페이지이며 외부 공유를 삼가 주세요. 남긴 의견은 이 페이지를 여는 모든 사람에게 보입니다.</div>
 </footer>
 
-<a class="btn fab" href="#feedback" id="fab">의견 남기기</a>
+
 
 <script>
-// Tally embed loader
-(function(){var d=document,w="https://tally.so/widgets/embed.js",v=function(){if(typeof Tally!=="undefined"){Tally.loadEmbeds()}else{d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach(function(e){e.src=e.dataset.tallySrc})}};if(typeof Tally!=="undefined"){v()}else if(!d.querySelector('script[src="'+w+'"]')){var s=d.createElement("script");s.src=w;s.onload=v;s.onerror=v;d.body.appendChild(s)}})();
-
 // Lightbox for zoomable images
 (function(){
-  var sel='.apps img,.web-full img,.web-more img,.heads img,.gal img';
+  var sel='.apps img,.web-more img,.heads img,.gal img';
   function open(src,alt){
     var lb=document.createElement('div');lb.className='lb';lb.setAttribute('role','dialog');lb.setAttribute('aria-label',alt||'이미지 크게 보기');
     var im=document.createElement('img');im.src=src;im.alt=alt||'';
@@ -461,11 +509,103 @@ footer{padding-block:40px;font-size:14px;color:var(--muted);border-top:1px solid
   });
 })();
 
-// Hide floating button when the form is on screen
+
+// ---------- Supabase feedback ----------
 (function(){
-  var fab=document.getElementById('fab'),fb=document.getElementById('feedback');
-  if(!('IntersectionObserver' in window))return;
-  new IntersectionObserver(function(es){fab.hidden=es[0].isIntersecting}).observe(fb);
+  var SB_URL='https://xjybbmonypjzmvatgfjg.supabase.co';
+  var SB_KEY='sb_publishable_sUUX-6sGbqc1M4-yoTCGrw_CngcPN-J';
+  var H={'apikey':SB_KEY,'Content-Type':'application/json'};
+  var TITLES={d01:'시안 01',d02:'시안 02',d03:'시안 03',d04:'시안 04',web:'홈페이지 개편안',templates:'템플릿'};
+  function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
+  var cid=store('igt_cid');
+  if(!cid){cid=(crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random().toString(36).slice(2));store('igt_cid',cid)}
+  var data={rows:[],summary:[]};
+  function api(path,opt){return fetch(SB_URL+'/rest/v1/'+path,Object.assign({headers:H},opt||{})).then(function(r){if(!r.ok)throw new Error(r.status);return r.status===201||r.status===204?null:r.json()})}
+  function load(){
+    return Promise.all([
+      api('feedback?select=id,created_at,section,rating,choice,comment,author,client_id&order=created_at.desc&limit=1000'),
+      api('feedback_summary?select=*')
+    ]).then(function(r){data.rows=r[0]||[];data.summary=r[1]||[];renderAll()}).catch(function(){
+      document.querySelectorAll('.stat').forEach(function(e){e.textContent='의견을 불러오지 못했습니다. 잠시 뒤 새로고침해 주세요.'});
+    });
+  }
+  function el(tag,cls,txt){var e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e}
+  function ago(t){var d=(Date.now()-new Date(t))/1000;if(d<60)return '방금';if(d<3600)return Math.floor(d/60)+'분 전';if(d<86400)return Math.floor(d/3600)+'시간 전';return new Date(t).toLocaleDateString('ko-KR',{month:'long',day:'numeric'})}
+  function stars(n){return '★★★★★'.slice(0,n)+'☆☆☆☆☆'.slice(0,5-n)}
+  function sum(sec){for(var i=0;i<data.summary.length;i++){var r=data.summary[i];if(r.section===sec&&!r.choice)return r}return null}
+  function myRating(sec){for(var i=0;i<data.rows.length;i++){var r=data.rows[i];if(r.section===sec&&r.client_id===cid&&r.rating)return r.rating}return 0}
+
+  // build widgets
+  document.querySelectorAll('.fbw').forEach(function(w){
+    var sec=w.dataset.section, title=w.dataset.title;
+    var head=el('div','fbw-head'); head.appendChild(el('h4',null,title+'에 대한 의견')); var st=el('span','stat','불러오는 중…'); head.appendChild(st); w.appendChild(head);
+    var f=el('form'); f.noValidate=true;
+    var sr=el('div','stars'); sr.setAttribute('role','radiogroup'); sr.setAttribute('aria-label',title+' 별점');
+    var val=0, btns=[];
+    for(var i=1;i<=5;i++){(function(n){var b=el('button',null,'★');b.type='button';b.setAttribute('role','radio');b.setAttribute('aria-label',n+'점');b.addEventListener('click',function(){val=(val===n?0:n);paint()});btns.push(b);sr.appendChild(b)})(i)}
+    var hint=el('small',null,'별점을 눌러 주세요'); sr.appendChild(hint);
+    function paint(){btns.forEach(function(b,i){b.classList.toggle('on',i<val);b.setAttribute('aria-checked',i+1===val)});hint.textContent=val?val+'점':'별점을 눌러 주세요'}
+    var ta=el('textarea'); ta.id='c_'+sec; ta.maxLength=2000; ta.placeholder='좋은 점, 아쉬운 점을 자유롭게 적어 주세요 (선택)'; ta.setAttribute('aria-label',title+' 의견');
+    var row=el('div','row'); var nm=el('input'); nm.type='text'; nm.id='n_'+sec; nm.maxLength=40; nm.placeholder='이름 (선택, 비우면 익명)'; nm.setAttribute('aria-label','이름'); nm.value=store('igt_name')||'';
+    var sb=el('button','btn','남기기'); sb.type='submit'; var msg=el('span','msg'); msg.setAttribute('role','status');
+    row.appendChild(nm); row.appendChild(sb); row.appendChild(msg);
+    f.appendChild(sr); f.appendChild(ta); f.appendChild(row); w.appendChild(f);
+    var list=el('ul','clist'); w.appendChild(list);
+    f.addEventListener('submit',function(e){
+      e.preventDefault(); msg.className='msg'; var c=ta.value.trim(), a=nm.value.trim();
+      if(!val&&!c){msg.className='msg err';msg.textContent='별점이나 의견 중 하나는 남겨 주세요.';return}
+      sb.disabled=true; msg.textContent='저장 중…'; if(a)store('igt_name',a);
+      api('feedback',{method:'POST',headers:Object.assign({'Prefer':'return=minimal'},H),body:JSON.stringify({section:sec,rating:val||null,comment:c||null,author:a||null,client_id:cid})})
+        .then(function(){ta.value='';msg.textContent='고맙습니다. 의견이 등록되었습니다.';return load()})
+        .catch(function(){msg.className='msg err';msg.textContent='저장하지 못했습니다. 잠시 뒤 다시 눌러 주세요.'})
+        .then(function(){sb.disabled=false});
+    });
+    w._render=function(){
+      var s=sum(sec); st.innerHTML='';
+      if(s){st.appendChild(document.createTextNode('평균 '));st.appendChild(el('b',null,'★ '+Number(s.avg_rating).toFixed(1)));st.appendChild(document.createTextNode(' · '+s.n+'명 참여'))}
+      else st.textContent='아직 별점이 없습니다';
+      if(!val){var m=myRating(sec);if(m){val=m;paint();hint.textContent='내 별점 '+m+'점 (다시 누르면 바뀝니다)'}}
+      var cs=data.rows.filter(function(r){return r.section===sec&&r.comment});
+      list.innerHTML='';
+      if(!cs.length){list.appendChild(el('li','empty','아직 의견이 없습니다. 첫 의견을 남겨 주세요.'));return}
+      cs.forEach(function(r){var li=el('li');var m=el('div','meta');m.appendChild(el('b',null,r.author||'익명'));if(r.rating)m.appendChild(el('span','s',stars(r.rating)));m.appendChild(el('span',null,ago(r.created_at)));li.appendChild(m);li.appendChild(el('div',null,r.comment));list.appendChild(li)});
+    };
+  });
+
+  // pick widget
+  var pw=document.getElementById('pick'); var pickBtns={};
+  if(pw){
+    pw.appendChild(el('h4',null,'가장 마음에 드는 시안을 하나 골라 주세요'));
+    var grid=el('div','picks'); var NAMES={'01':'시안 01 · 선의 리듬','02':'시안 02 · 점진적 전환','03':'시안 03 · 잎사귀의 흐름','04':'시안 04 · 고딕 워드마크'};
+    Object.keys(NAMES).forEach(function(k){var b=el('button');b.type='button';b.setAttribute('aria-pressed','false');b.appendChild(el('span','t',NAMES[k]));var bar=el('span','bar');bar.appendChild(el('i'));b.appendChild(bar);b.appendChild(el('span','n','0표'));
+      b.addEventListener('click',function(){Object.keys(pickBtns).forEach(function(x){pickBtns[x].setAttribute('aria-pressed',x===k)});pm.className='msg';pm.textContent='저장 중…';
+        api('feedback',{method:'POST',headers:Object.assign({'Prefer':'return=minimal'},H),body:JSON.stringify({section:'pick',choice:k,client_id:cid})}).then(function(){pm.textContent='선택이 반영되었습니다.';return load()}).catch(function(){pm.className='msg err';pm.textContent='저장하지 못했습니다. 다시 눌러 주세요.'})});
+      pickBtns[k]=b;grid.appendChild(b)});
+    pw.appendChild(grid); var pm=el('span','msg'); pm.setAttribute('role','status'); pw.appendChild(pm);
+  }
+  function renderPick(){
+    if(!pw)return; var tot=0,cnt={};data.summary.forEach(function(r){if(r.section==='pick'&&r.choice){cnt[r.choice]=r.n;tot+=r.n}});
+    var mine=null;for(var i=0;i<data.rows.length;i++){var r=data.rows[i];if(r.section==='pick'&&r.client_id===cid){mine=r.choice;break}}
+    Object.keys(pickBtns).forEach(function(k){var b=pickBtns[k],n=cnt[k]||0;b.querySelector('.bar i').style.width=(tot?Math.round(n/tot*100):0)+'%';b.querySelector('.n').textContent=n+'표'+(tot?' ('+Math.round(n/tot*100)+'%)':'');if(mine)b.setAttribute('aria-pressed',k===mine)});
+  }
+  function renderBoard(){
+    var bd=document.getElementById('board'); if(!bd)return; bd.innerHTML='';
+    var tot=0,best=null,bestN=-1;data.summary.forEach(function(r){if(r.section==='pick'&&r.choice){tot+=r.n;if(r.n>bestN){bestN=r.n;best=r.choice}}});
+    var people={};data.rows.forEach(function(r){people[r.client_id]=1});
+    function card(k,v,small,href){var a=el(href?'a':'div','card');if(href)a.href=href;a.appendChild(el('span','k',k));var vv=el('span','v',v);if(small)vv.appendChild(el('small',null,small));a.appendChild(vv);bd.appendChild(a)}
+    card('참여한 사람',String(Object.keys(people).length),'명');
+    card('선호 1위',best?('시안 '+best):'-',best?(bestN+'표 / '+tot+'표'):'아직 없음','#compare');
+    card('남긴 의견',String(data.rows.filter(function(r){return r.comment}).length),'건');
+    ['d01','d02','d03','d04','web','templates'].forEach(function(sec){var s=sum(sec);card(TITLES[sec]+' 평균 별점',s?('★ '+Number(s.avg_rating).toFixed(1)):'-',s?(s.n+'명'):'아직 없음','#'+(sec==='web'?'web':sec==='templates'?'templates':sec))});
+  }
+  function renderAll(){document.querySelectorAll('.fbw').forEach(function(w){w._render&&w._render()});renderPick();renderBoard()}
+  load(); setInterval(function(){if(!document.hidden)load()},30000);
+})();
+
+// homepage scroller jump
+(function(){
+  var sc=document.getElementById('webScroller'); if(!sc)return;
+  document.querySelectorAll('[data-go]').forEach(function(b){b.addEventListener('click',function(){var p=sc.querySelector('[data-pin="'+b.dataset.go+'"]');sc.scrollTop=Math.max(0,p.offsetTop-80)})});
 })();
 </script>
 </body>
