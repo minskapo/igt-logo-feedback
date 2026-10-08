@@ -19,6 +19,7 @@
 }
 *{box-sizing:border-box}
 button,input,textarea,select{font-family:inherit}
+[hidden]{display:none!important}
 html{scroll-behavior:smooth;scroll-padding-top:72px}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 body{margin:0;background:var(--white);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.7;-webkit-font-smoothing:antialiased;word-break:keep-all}
@@ -210,6 +211,11 @@ section{padding-block:88px}
 .clist .meta b{color:var(--ink);font-size:13px}
 .clist .meta .s{color:var(--leaf);letter-spacing:1px}
 .empty{font-size:14px;color:var(--muted)}
+.clist li.own{background:var(--lime-soft);border:1px solid var(--lime)}
+.clist .tag{font-size:11.5px;font-weight:700;background:var(--lime);color:var(--ink);border-radius:999px;padding:1px 8px}
+.clist .del{all:unset;cursor:pointer;margin-left:auto;font-size:12.5px;font-weight:700;color:#B3261E;text-decoration:underline}
+.clist .del:focus-visible{outline:2px solid var(--leaf)}
+.clist .del[data-armed]{text-decoration:none;background:#B3261E;color:#fff;border-radius:6px;padding:1px 8px}
 .more{all:unset;cursor:pointer;font-size:14px;font-weight:700;text-decoration:underline}
 /* pick */
 .pickw{margin-top:28px;background:var(--surface);border-radius:20px;padding:28px;display:grid;gap:18px}
@@ -515,7 +521,7 @@ footer{padding-block:40px;font-size:14px;color:var(--muted);border-top:1px solid
 </main>
 
 <footer>
-  <div class="wrap">원본: PUSH THE LEVER, 「녹색전환연구소 Brand Design Draft」(2026.10.08). 내부 의견수렴용 페이지이며 외부 공유를 삼가 주세요. 남긴 의견은 이 페이지를 여는 모든 사람에게 보입니다.</div>
+  <div class="wrap">원본: PUSH THE LEVER, 「녹색전환연구소 Brand Design Draft」(2026.10.08). 내부 의견수렴용 페이지이며 외부 공유를 삼가 주세요. 남긴 의견은 이 페이지를 여는 모든 사람에게 보이며, 의견을 남긴 브라우저에서만 삭제할 수 있습니다.</div>
 </footer>
 
 
@@ -550,8 +556,15 @@ footer{padding-block:40px;font-size:14px;color:var(--muted);border-top:1px solid
   function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
   var cid=store('igt_cid');
   if(!cid){cid=(crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random().toString(36).slice(2));store('igt_cid',cid)}
+  var secret=store('igt_secret');
+  if(!secret){var b=new Uint8Array(24);crypto.getRandomValues(b);secret=Array.from(b,function(x){return ('0'+x.toString(16)).slice(-2)}).join('');store('igt_secret',secret)}
+  var mine={};try{(JSON.parse(store('igt_mine')||'[]')).forEach(function(i){mine[i]=1})}catch(e){}
+  function remember(id){mine[id]=1;store('igt_mine',JSON.stringify(Object.keys(mine).map(Number)))}
+  function isMine(r){return !!mine[r.id]}
+  function add(body){return api('rpc/add_feedback',{method:'POST',body:JSON.stringify(Object.assign({p_section:null,p_rating:null,p_choice:null,p_comment:null,p_author:null,p_client_id:cid,p_secret:secret},body))}).then(function(id){if(id)remember(id);return id})}
+  function removeOwn(id){return api('rpc/remove_own_feedback',{method:'POST',body:JSON.stringify({p_id:id,p_secret:secret})})}
   var data={rows:[],summary:[]};
-  function api(path,opt){return fetch(SB_URL+'/rest/v1/'+path,Object.assign({headers:H},opt||{})).then(function(r){if(!r.ok)throw new Error(r.status);return r.status===201||r.status===204?null:r.json()})}
+  function api(path,opt){return fetch(SB_URL+'/rest/v1/'+path,Object.assign({headers:H},opt||{})).then(function(r){if(!r.ok)throw new Error(r.status);return r.status===204?null:r.text().then(function(t){return t?JSON.parse(t):null})})}
   function load(){
     return Promise.all([
       api('feedback?select=id,created_at,section,rating,choice,comment,author,client_id&order=created_at.desc&limit=1000'),
@@ -586,7 +599,7 @@ footer{padding-block:40px;font-size:14px;color:var(--muted);border-top:1px solid
       e.preventDefault(); msg.className='msg'; var c=ta.value.trim(), a=nm.value.trim();
       if(!val&&!c){msg.className='msg err';msg.textContent='별점이나 의견 중 하나는 남겨 주세요.';return}
       sb.disabled=true; msg.textContent='저장 중…'; if(a)store('igt_name',a);
-      api('feedback',{method:'POST',headers:Object.assign({'Prefer':'return=minimal'},H),body:JSON.stringify({section:sec,rating:val||null,comment:c||null,author:a||null,client_id:cid})})
+      add({p_section:sec,p_rating:val||null,p_comment:c||null,p_author:a||null})
         .then(function(){ta.value='';msg.textContent='고맙습니다. 의견이 등록되었습니다.';return load()})
         .catch(function(){msg.className='msg err';msg.textContent='저장하지 못했습니다. 잠시 뒤 다시 눌러 주세요.'})
         .then(function(){sb.disabled=false});
@@ -599,7 +612,11 @@ footer{padding-block:40px;font-size:14px;color:var(--muted);border-top:1px solid
       var cs=data.rows.filter(function(r){return r.section===sec&&r.comment});
       list.innerHTML='';
       if(!cs.length){list.appendChild(el('li','empty','아직 의견이 없습니다. 첫 의견을 남겨 주세요.'));return}
-      cs.forEach(function(r){var li=el('li');var m=el('div','meta');m.appendChild(el('b',null,r.author||'익명'));if(r.rating)m.appendChild(el('span','s',stars(r.rating)));m.appendChild(el('span',null,ago(r.created_at)));li.appendChild(m);li.appendChild(el('div',null,r.comment));list.appendChild(li)});
+      cs.forEach(function(r){var li=el('li');var m=el('div','meta');m.appendChild(el('b',null,r.author||'익명'));if(r.rating)m.appendChild(el('span','s',stars(r.rating)));m.appendChild(el('span',null,ago(r.created_at)));
+        if(isMine(r)){li.classList.add('own');m.appendChild(el('span','tag','내 의견'));var del=el('button','del','삭제');del.type='button';m.appendChild(del);
+          del.addEventListener('click',function(){if(del.dataset.armed){del.disabled=true;del.textContent='삭제 중…';removeOwn(r.id).then(function(ok){if(!ok)throw 0;return load()}).catch(function(){del.disabled=false;del.textContent='삭제하지 못했습니다';delete del.dataset.armed})}
+            else{del.dataset.armed='1';del.textContent='정말 삭제할까요? 한 번 더 누르세요';setTimeout(function(){if(del.isConnected&&!del.disabled){delete del.dataset.armed;del.textContent='삭제'}},4000)}});}
+        li.appendChild(m);li.appendChild(el('div',null,r.comment));list.appendChild(li)});
     };
   });
 
@@ -610,14 +627,18 @@ footer{padding-block:40px;font-size:14px;color:var(--muted);border-top:1px solid
     var grid=el('div','picks'); var NAMES={'01':'시안 01 · 선의 리듬','02':'시안 02 · 점진적 전환','03':'시안 03 · 잎사귀의 흐름','04':'시안 04 · 고딕 워드마크'};
     Object.keys(NAMES).forEach(function(k){var b=el('button');b.type='button';b.setAttribute('aria-pressed','false');b.appendChild(el('span','t',NAMES[k]));var bar=el('span','bar');bar.appendChild(el('i'));b.appendChild(bar);b.appendChild(el('span','n','0표'));
       b.addEventListener('click',function(){Object.keys(pickBtns).forEach(function(x){pickBtns[x].setAttribute('aria-pressed',x===k)});pm.className='msg';pm.textContent='저장 중…';
-        api('feedback',{method:'POST',headers:Object.assign({'Prefer':'return=minimal'},H),body:JSON.stringify({section:'pick',choice:k,client_id:cid})}).then(function(){pm.textContent='선택이 반영되었습니다.';return load()}).catch(function(){pm.className='msg err';pm.textContent='저장하지 못했습니다. 다시 눌러 주세요.'})});
+        add({p_section:'pick',p_choice:k}).then(function(){pm.textContent='선택이 반영되었습니다.';return load()}).catch(function(){pm.className='msg err';pm.textContent='저장하지 못했습니다. 다시 눌러 주세요.'})});
       pickBtns[k]=b;grid.appendChild(b)});
-    pw.appendChild(grid); var pm=el('span','msg'); pm.setAttribute('role','status'); pw.appendChild(pm);
+    pw.appendChild(grid); var prow=el('div','row'); var pm=el('span','msg'); pm.setAttribute('role','status');
+    var pc=el('button','more','내 선택 취소'); pc.type='button'; pc.hidden=true; prow.appendChild(pc); prow.appendChild(pm); pw.appendChild(prow);
+    pc.addEventListener('click',function(){var ids=data.rows.filter(function(r){return r.section==='pick'&&isMine(r)}).map(function(r){return r.id});pm.className='msg';pm.textContent='취소 중…';
+      Promise.all(ids.map(removeOwn)).then(function(){Object.keys(pickBtns).forEach(function(x){pickBtns[x].setAttribute('aria-pressed','false')});pm.textContent='선택을 취소했습니다.';return load()}).catch(function(){pm.className='msg err';pm.textContent='취소하지 못했습니다.'})});
   }
   function renderPick(){
     if(!pw)return; var tot=0,cnt={};data.summary.forEach(function(r){if(r.section==='pick'&&r.choice){cnt[r.choice]=r.n;tot+=r.n}});
-    var mine=null;for(var i=0;i<data.rows.length;i++){var r=data.rows[i];if(r.section==='pick'&&r.client_id===cid){mine=r.choice;break}}
-    Object.keys(pickBtns).forEach(function(k){var b=pickBtns[k],n=cnt[k]||0;b.querySelector('.bar i').style.width=(tot?Math.round(n/tot*100):0)+'%';b.querySelector('.n').textContent=n+'표'+(tot?' ('+Math.round(n/tot*100)+'%)':'');if(mine)b.setAttribute('aria-pressed',k===mine)});
+    var minePick=null;for(var i=0;i<data.rows.length;i++){var r=data.rows[i];if(r.section==='pick'&&(isMine(r)||r.client_id===cid)){minePick=r.choice;break}}
+    pc.hidden=!data.rows.some(function(r){return r.section==='pick'&&isMine(r)});
+    Object.keys(pickBtns).forEach(function(k){var b=pickBtns[k],n=cnt[k]||0;b.querySelector('.bar i').style.width=(tot?Math.round(n/tot*100):0)+'%';b.querySelector('.n').textContent=n+'표'+(tot?' ('+Math.round(n/tot*100)+'%)':'');b.setAttribute('aria-pressed',minePick?k===minePick:'false')});
   }
   function renderBoard(){
     var bd=document.getElementById('board'); if(!bd)return; bd.innerHTML='';
