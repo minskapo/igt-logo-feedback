@@ -117,6 +117,25 @@ section{padding-block:88px}
 .chrome i{width:10px;height:10px;border-radius:50%;background:var(--line)}
 .chrome span{margin-left:12px;font-family:var(--f-mono);font-size:12px;color:var(--muted);background:var(--white);border-radius:6px;padding:2px 12px}
 .scroller{height:min(86vh,1000px);overflow-y:auto;overscroll-behavior:contain;scroll-behavior:smooth}
+.scroller{--s:.74;position:relative}
+.stickyhead{position:sticky;top:0;height:0;z-index:3}
+.stickyhead .toolbar{position:absolute;top:0;left:0;width:100%;display:block}
+.glassnav{position:absolute;top:calc(65px*var(--s));left:calc(32px*var(--s));width:calc(1472px*var(--s));height:calc(86px*var(--s));border-radius:calc(30px*var(--s));
+  display:flex;align-items:center;gap:calc(14px*var(--s));padding-inline:calc(40px*var(--s)) calc(24px*var(--s));
+  background:rgba(96,112,128,.42);backdrop-filter:blur(16px) saturate(150%);-webkit-backdrop-filter:blur(16px) saturate(150%);
+  border:1px solid rgba(255,255,255,.18);box-shadow:0 8px 30px rgba(20,30,40,.18);color:#fff;font-size:calc(15px*var(--s));
+  opacity:0;transform:translateY(calc(-12px*var(--s)));transition:opacity .35s ease,transform .35s ease;pointer-events:none}
+.scroller.scrolled .glassnav{opacity:1;transform:none}
+.gl-logo{height:calc(30px*var(--s));width:auto}
+.gl-menu{list-style:none;margin:0 0 0 auto;padding:0;display:flex;gap:0;margin-right:calc(40px*var(--s))}
+.gl-menu li{padding-inline:calc(28px*var(--s));border-left:1px solid rgba(255,255,255,.35);line-height:1}
+.gl-menu li:first-child{border-left:0}
+.gl-pill{border-radius:999px;padding:calc(9px*var(--s)) calc(18px*var(--s));white-space:nowrap;font-weight:500}
+.gl-pill.out{border:1px solid rgba(255,255,255,.85)}
+.gl-pill.lime{background:var(--lime);color:var(--ink)}
+.gl-search{margin-left:calc(16px*var(--s));flex:0 0 calc(294px*var(--s));display:flex;justify-content:space-between;align-items:center;background:rgba(40,52,64,.28);border-radius:calc(14px*var(--s));padding:calc(10px*var(--s)) calc(18px*var(--s));color:rgba(255,255,255,.75);white-space:nowrap}
+.gl-search svg{color:#fff}
+@media (prefers-reduced-motion:reduce){.glassnav{transition:none}}
 .page{position:relative}
 .page img{width:100%;display:block}
 .pin{position:absolute;right:16px;width:40px;height:40px;border-radius:50%;background:var(--ink);color:var(--lime);display:grid;place-items:center;font-weight:700;font-size:16px;box-shadow:0 0 0 4px var(--lime)}
@@ -396,10 +415,19 @@ footer{padding-block:40px;font-size:14px;color:var(--muted);border-top:1px solid
 
 <section class="band" id="web">
   <div class="wrap">
-    <div class="sec-head"><p class="eyebrow">Touch point · Web</p><h2>홈페이지 개편안</h2><p>메인 화면을 실제 브라우저처럼 위에서 아래로 이어서 보여 드립니다. 화면 안에서 스크롤하거나, 위쪽 번호를 누르면 해당 구역으로 이동합니다.</p></div>
+    <div class="sec-head"><p class="eyebrow">Touch point · Web</p><h2>홈페이지 개편안</h2><p>메인 화면을 실제 브라우저처럼 위에서 아래로 이어서 보여 드립니다. 화면 안에서 스크롤하면 메뉴바가 반투명하게 화면 위에 고정되는 모습도 볼 수 있습니다. 위쪽 번호를 누르면 해당 구역으로 이동합니다.</p></div>
     <div class="web-full">
       <div class="browser">
         <div class="scroller" id="webScroller" tabindex="0" aria-label="홈페이지 메인 화면 전체 (스크롤)">
+          <div class="stickyhead" aria-hidden="true">
+            <img class="toolbar" src="img/web_toolbar.jpg" alt="">
+            <div class="glassnav">
+              <img class="gl-logo" src="img/logo_white.png" alt="">
+              <ul class="gl-menu"><li>연구</li><li>소식</li><li>참여</li><li>후원</li><li>소개</li></ul>
+              <span class="gl-pill out">문의 강의 요청</span><span class="gl-pill lime">기후시민플랫폼</span>
+              <span class="gl-search">전체자료 검색<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></span>
+            </div>
+          </div>
           <div class="page"><img src="img/webfull.jpg" alt="홈페이지 메인 화면 전체: 메뉴와 첫 화면, 최신소식, 후원 배너, 지금 읽어야 할 연구, 푸터">
             <span class="pin" data-pin="1" style="top:9.4%">1</span><span class="pin" data-pin="2" style="top:31%">2</span><span class="pin" data-pin="3" style="top:51%">3</span><span class="pin" data-pin="4" style="top:60.6%">4</span><span class="pin" data-pin="5" style="top:84.6%">5</span>
           </div>
@@ -606,6 +634,14 @@ footer{padding-block:40px;font-size:14px;color:var(--muted);border-top:1px solid
 (function(){
   var sc=document.getElementById('webScroller'); if(!sc)return;
   document.querySelectorAll('[data-go]').forEach(function(b){b.addEventListener('click',function(){var p=sc.querySelector('[data-pin="'+b.dataset.go+'"]');sc.scrollTop=Math.max(0,p.offsetTop-80)})});
+})();
+
+// glass nav inside homepage mock: scale + show after scrolling
+(function(){
+  var sc=document.getElementById('webScroller'); if(!sc)return;
+  function scale(){sc.style.setProperty('--s',(sc.clientWidth/1536).toFixed(4))}
+  function onScroll(){sc.classList.toggle('scrolled',sc.scrollTop>40*sc.clientWidth/1536)}
+  scale(); onScroll(); window.addEventListener('resize',scale); sc.addEventListener('scroll',onScroll,{passive:true});
 })();
 </script>
 </body>
